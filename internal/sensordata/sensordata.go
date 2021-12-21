@@ -26,13 +26,8 @@ func New() SensorData {
 	return sensorData
 }
 
-func (sd *SensorData) ReadRelativeHumidityAndTemperature() {
-	rh, t, err := sd.sensor.ReadRelativeHumidityAndTemperature(sd.i2cBus)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("Relative humidity and temperature = %v%%, %v*C\n", rh, t)
-
+func (sd *SensorData) ReadRelativeHumidityAndTemperature() (float32, float32, error) {
+	return sd.sensor.ReadRelativeHumidityAndTemperature(sd.i2cBus)
 }
 
 func (sd *SensorData) Close() error {

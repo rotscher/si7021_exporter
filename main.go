@@ -3,7 +3,8 @@ package main
 import (
 	"github.com/d2r2/go-logger"
 	"github.com/rotscher/si7021_exporter/internal/sensordata"
-	"time"
+	"log"
+	"net/http"
 )
 
 func main() {
@@ -18,9 +19,10 @@ func main() {
 		}
 	}(&sd)
 
-	for {
-		sd.ReadRelativeHumidityAndTemperature()
-		time.Sleep(10 * time.Second)
-	}
+	http.HandleFunc("/metrics", sd.Export)
 
+	err := http.ListenAndServe(":8090", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
